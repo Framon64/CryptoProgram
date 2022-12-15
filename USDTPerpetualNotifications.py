@@ -14,10 +14,30 @@ class HandleMessage(QtWidgets.QMainWindow):
         self.programWindow = Ui_MainWindow()
         self.programWindow.setupUi(self)
         self.display()
+        self.connect()
 
     def display(self):
         self.programWindow.lineEdit.setPlaceholderText('Пример: btc, eth, doge')
 
+    def connect(self):
+
+        ws_linear = usdt_perpetual.WebSocket(
+            test=False,
+            ping_interval=3000,
+            ping_timeout=2000,
+            domain="bybit"
+            )
+
+        ws_linear.kline_stream(
+            callback=self.handle_message, 
+            symbol='BTCUSDT', 
+            interval="1"
+            )
+
+    def handle_message(self, msg):
+        data = msg['data'][0]
+        close = data["close"]
+        print(f"Цена закрытия: {close}")
 
 
 
