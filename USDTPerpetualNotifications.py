@@ -14,14 +14,14 @@ class HandleMessage(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwds):
         super(HandleMessage, self).__init__()
         self.programWindow = Ui_MainWindow()
-        self.programWindow.setupUi(self)
+        self.programWindow.setupUi(self) 
         self.display()
         self.connect()
         #self.addWindowProgram()
         
 
     def display(self):
-        self.programWindow.lineEdit.setPlaceholderText('Пример: btc, eth, doge')
+        self.programWindow.search.setPlaceholderText('Пример: btc, eth, doge')
 
     #Подключение к API
     def connect(self):
@@ -46,11 +46,23 @@ class HandleMessage(QtWidgets.QMainWindow):
         turnover = '{0:,}'.format(int(float(data['turnover']))).replace(',', '.')
         priceChange = round((close/open-1)*100, 2)
 
-        self.programWindow.lineEdit_2.setText(str(close))
-        self.programWindow.lineEdit_3.setText(symbol)
-        self.programWindow.lineEdit_4.setText(str(priceChange))
-        self.programWindow.lineEdit_5.setText(str(turnover))
+        self.programWindow.lastTradedPrice.setText(str(close))
+        self.programWindow.tradingPairs.setText(symbol)
+        self.programWindow.percentageChange.setText(str(priceChange))
+        self.programWindow.turnover.setText(str(turnover))
+        if close > open: 
 
+            self.programWindow.lastTradedPrice.setStyleSheet("color: yellow;\nborder: 0")
+            self.programWindow.percentageChange.setStyleSheet("color: yellow;\nborder: 0")
+
+        elif close < open:   
+            self.programWindow.lastTradedPrice.setStyleSheet("color: red;\nborder: 0")
+            self.programWindow.percentageChange.setStyleSheet("color: red;\nborder: 0")
+        else:
+            self.programWindow.lastTradedPrice.setStyleSheet("color: white;\nborder: 0")
+            self.programWindow.percentageChange.setStyleSheet("color: white;\nborder: 0")
+
+           
         
 
         
